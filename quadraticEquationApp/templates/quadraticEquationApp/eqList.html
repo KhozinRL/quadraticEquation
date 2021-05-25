@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'quadraticEquationApp/table.css' %}">
+    <meta charset="UTF-8">
+    <title>List of equations</title>
+</head>
+<body>
+<h1>List of equations</h1>
+
+<table>
+{% for equation in eq_list %}
+   <tr>
+    <td>{{equation.a}}x^2 + {{equation.b}}x + {{equation.c}}</td>
+       <td>
+        {% if equation.x1 == null and equation.x2 == null %}
+           no solution
+        {% else %}
+            {% if equation.x1 == equation.x2 %}
+                x1 = x2 = {{equation.x1|floatformat:2}}
+            {% else %}
+                x1 = {{equation.x1|floatformat:2}}, x2 = {{equation.x2|floatformat:2}}
+            {% endif %}
+        {% endif %}
+       </td>
+       <td>
+           <form action="{% url 'quadraticEquationApp:calculate' equation.id %}" method="post">
+               {% csrf_token %}
+               <button type="submit">Вычислить</button>
+           </form>
+       </td>
+   </tr>
+{% endfor %}
+</table>
+
+<a href="{% url 'quadraticEquationApp:equation_input' %}">Back to equation input form</a>
+</body>
+</html>
